@@ -1,4 +1,4 @@
-package com.example.modtemplate.client;
+package com.github.razorplay01.sway.client;
 
 public class SwayData {
 	public float nx;

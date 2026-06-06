@@ -1,6 +1,6 @@
-package com.example.modtemplate.config;
+package com.github.razorplay01.sway.config;
 
-import com.example.modtemplate.ModTemplate;
+import com.github.razorplay01.sway.ModTemplate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.slf4j.Logger;

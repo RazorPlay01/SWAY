@@ -1,8 +1,8 @@
-package com.example.modtemplate.platform.neoforge;
+package com.github.razorplay01.sway.platform.neoforge;
 
 //? neoforge {
 
-/*import com.example.modtemplate.platform.Platform;
+/*import com.github.razorplay01.sway.platform.Platform;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.fml.loading.FMLPaths;

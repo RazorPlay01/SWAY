@@ -1,10 +1,10 @@
-package com.example.modtemplate.platform.fabric;
+package com.github.razorplay01.sway.platform.fabric;
 
 //? fabric {
 
-import com.example.modtemplate.ModTemplate;
-import com.example.modtemplate.api.SwayAPI;
-import com.example.modtemplate.client.SwayModel;
+import com.github.razorplay01.sway.ModTemplate;
+import com.github.razorplay01.sway.api.SwayAPI;
+import com.github.razorplay01.sway.client.SwayModel;
 import dev.kikugie.fletching_table.annotation.fabric.Entrypoint;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;

@@ -1,7 +1,7 @@
-package com.example.modtemplate.client;
+package com.github.razorplay01.sway.client;
 
-import com.example.modtemplate.api.SwayAPI;
-import com.example.modtemplate.config.SwayConfig;
+import com.github.razorplay01.sway.api.SwayAPI;
+import com.github.razorplay01.sway.config.SwayConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;

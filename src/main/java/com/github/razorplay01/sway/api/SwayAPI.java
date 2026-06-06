@@ -1,4 +1,4 @@
-package com.example.modtemplate.api;
+package com.github.razorplay01.sway.api;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;

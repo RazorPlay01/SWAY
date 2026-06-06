@@ -1,8 +1,8 @@
-package com.example.modtemplate.platform.forge;
+package com.github.razorplay01.sway.platform.forge;
 
 //? forge {
 
-/*import com.example.modtemplate.ModTemplate;
+/*import com.github.razorplay01.sway.ModTemplate;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod(ModTemplate.MOD_ID)

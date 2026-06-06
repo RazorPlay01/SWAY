@@ -1,7 +1,7 @@
-package com.example.modtemplate.config;
+package com.github.razorplay01.sway.config;
 
-import com.example.modtemplate.ModTemplate;
-import com.example.modtemplate.api.SwayAPI;
+import com.github.razorplay01.sway.ModTemplate;
+import com.github.razorplay01.sway.api.SwayAPI;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;

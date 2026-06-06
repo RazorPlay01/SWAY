@@ -1,18 +1,18 @@
-package com.example.modtemplate;
+package com.github.razorplay01.sway;
 
-import com.example.modtemplate.config.SwayConfig;
-import com.example.modtemplate.config.SwayRegistry;
-import com.example.modtemplate.platform.Platform;
+import com.github.razorplay01.sway.config.SwayConfig;
+import com.github.razorplay01.sway.config.SwayRegistry;
+import com.github.razorplay01.sway.platform.Platform;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 //? fabric {
-import com.example.modtemplate.platform.fabric.FabricPlatform;
+import com.github.razorplay01.sway.platform.fabric.FabricPlatform;
 //?} neoforge {
-/*import com.example.modtemplate.platform.neoforge.NeoforgePlatform;
+/*import com.github.razorplay01.sway.platform.neoforge.NeoforgePlatform;
  *///?} forge {
-/*import com.example.modtemplate.platform.forge.ForgePlatform;
+/*import com.github.razorplay01.sway.platform.forge.ForgePlatform;
  *///?}
 
 @SuppressWarnings("LoggingSimilarMessage")

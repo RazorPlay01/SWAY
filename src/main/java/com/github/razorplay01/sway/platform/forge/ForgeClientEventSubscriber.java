@@ -1,8 +1,8 @@
-package com.example.modtemplate.platform.forge;
+package com.github.razorplay01.sway.platform.forge;
 
 //? forge {
-/*import com.example.modtemplate.ModTemplate;
-import com.example.modtemplate.client.SwayModel;
+/*import com.github.razorplay01.sway.ModTemplate;
+import com.github.razorplay01.sway.client.SwayModel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

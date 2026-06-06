@@ -1,27 +1,24 @@
-mod.id = "modtemplate"
-mod.name = "Mod Template"
-mod.group = "com.example"
-mod.version = "0.1.0"
-mod.channel_tag = "-alpha.2"
-mod.description = "Example Description"
-mod.authors = ["AuthorName", "AnotherAuthorName"]
-mod.contributors = ["ContributorName", "AnotherContributorName"]
-mod.inception_year = "2025"
+mod.id = "sway"
+mod.name = "SWAY"
+mod.group = "com.github.razorplay01"
+mod.version = "1.0.0"
+mod.channel_tag = ""
+mod.description = "Realistic foliage interaction and deformation for Minecraft."
+mod.authors = ["RazorPlay01"]
+mod.contributors = []
+mod.inception_year = "2026"
 mod.license.name = "MIT"
 mod.license.url = "https://opensource.org/licenses/MIT"
 mod.license.dist = "repo"
-mod.sources_url = "https://github.com/rotgruengelb/stonecutter-mod-template"
-mod.homepage_url = "https://github.com/rotgruengelb/stonecutter-mod-template"
-mod.issues_url = "https://github.com/rotgruengelb/stonecutter-mod-template/issues"
-mod.discord_url = "https://discord.gg/aunYJB4wz9"
+mod.sources_url = "https://github.com/RazorPlay01/SWAY"
+mod.homepage_url = "https://github.com/RazorPlay01/SWAY"
+mod.issues_url = "https://github.com/RazorPlay01/SWAY/issues"
+mod.discord_url = "https://discord.gg/YP3wDfqkRt"
 [[mod.pom.developers]]
-id = "authorname"
-name = "AuthorName"
+id = "razorplay01"
+name = "RazorPlay01"
 url = "https://github.com/ghost"
-[[mod.pom.developers]]
-id = "anotherauthorname"
-name = "AnotherAuthorName"
-url = "https://github.com/ghost"
+
 [fabric]
 deps.fabric-loader = "0.19.2"
 

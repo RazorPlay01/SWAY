@@ -1,4 +1,4 @@
-package com.example.modtemplate.platform;
+package com.github.razorplay01.sway.platform;
 
 import java.nio.file.Path;
 

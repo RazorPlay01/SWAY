@@ -1,8 +1,8 @@
-package com.example.modtemplate.platform.fabric;
+package com.github.razorplay01.sway.platform.fabric;
 
 //? fabric {
 
-import com.example.modtemplate.platform.Platform;
+import com.github.razorplay01.sway.platform.Platform;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.nio.file.Path;

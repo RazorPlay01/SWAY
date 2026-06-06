@@ -1,9 +1,9 @@
-package com.example.modtemplate.platform.neoforge;
+package com.github.razorplay01.sway.platform.neoforge;
 
 //? neoforge {
-/*import com.example.modtemplate.ModTemplate;
-import com.example.modtemplate.api.SwayAPI;
-import com.example.modtemplate.client.SwayModel;
+/*import com.github.razorplay01.sway.ModTemplate;
+import com.github.razorplay01.sway.api.SwayAPI;
+import com.github.razorplay01.sway.client.SwayModel;
 import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;

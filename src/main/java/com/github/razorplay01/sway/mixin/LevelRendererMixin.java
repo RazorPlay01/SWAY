@@ -1,6 +1,6 @@
-package com.example.modtemplate.mixin;
+package com.github.razorplay01.sway.mixin;
 
-import com.example.modtemplate.client.SwayEngine;
+import com.github.razorplay01.sway.client.SwayEngine;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.LevelRenderer;

@@ -1,5 +1,5 @@
 {
-  "package": "com.example.modtemplate.mixin",
+  "package": "com.github.razorplay01.sway.mixin",
   "required": true,
   "minVersion": "0.8",
   "compatibilityLevel": "${java}",
