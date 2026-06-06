@@ -25,8 +25,8 @@ public class FabricClientEntrypoint implements ClientModInitializer {
 				return model;
 			});*/
 			//?}
-			//? <=1.21.1 {
-			ctx.modifyModelAfterBake().register((model, context) -> {
+			//? >1.20.1 && <=1.21.1 {
+			/*ctx.modifyModelAfterBake().register((model, context) -> {
 				if (context.resourceId() == null) {
 					return model;
 				}
@@ -51,6 +51,40 @@ public class FabricClientEntrypoint implements ClientModInitializer {
 						.filter(SwayAPI::isInteractive)
 						.map(block -> (net.minecraft.client.resources.model.BakedModel) new SwayModel(model))
 						.orElse(model);
+			});*/
+			//?}
+			//? <=1.20.1{
+			ctx.modifyModelAfterBake().register((model, context) -> {
+				var modelId = context.id();
+				if (modelId == null) {
+					return model;
+				}
+
+				String path = modelId.getPath();
+				if (!path.startsWith("block/")) {
+					return model;
+				}
+
+				try {
+					String blockName = path.substring(6);
+					blockName = blockName.replaceAll("_(top|bottom|upper|lower)$", "");
+					blockName = blockName.split("#")[0];
+
+					net.minecraft.resources.ResourceLocation blockId =
+							new net.minecraft.resources.ResourceLocation(
+									modelId.getNamespace(),
+									blockName
+							);
+
+					return net.minecraft.core.registries.BuiltInRegistries.BLOCK
+							.getOptional(blockId)
+							.filter(SwayAPI::isInteractive)
+							.map(block -> (net.minecraft.client.resources.model.BakedModel) new SwayModel(model))
+							.orElse(model);
+				} catch (Exception e) {
+					// Log error si es necesario
+					return model;
+				}
 			});
 			//?}
 		});

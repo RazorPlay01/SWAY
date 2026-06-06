@@ -66,7 +66,8 @@ public class SwayModel implements /*? >= 1.21.2 {*/ /*BlockStateModel*/ /*?} els
 	@Override
 	public void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context) {
 		if (blockView == null || pos == null || state == null) {
-			if (parent instanceof FabricBakedModel fabricParent) {
+			if (parent instanceof FabricBakedModel) {
+				FabricBakedModel fabricParent = parent;
 				fabricParent.emitBlockQuads(blockView, state, pos, randomSupplier, context);
 			}
 			return;
@@ -82,7 +83,8 @@ public class SwayModel implements /*? >= 1.21.2 {*/ /*BlockStateModel*/ /*?} els
 
 		SwayData data = SwayEngine.get(swayPos);
 		if (data == null || data.intensity < 0.01F) {
-			if (parent instanceof FabricBakedModel fabricParent) {
+			if (parent instanceof FabricBakedModel) {
+				FabricBakedModel fabricParent = parent;
 				fabricParent.emitBlockQuads(blockView, state, pos, randomSupplier, context);
 			}
 			return;
@@ -102,7 +104,8 @@ public class SwayModel implements /*? >= 1.21.2 {*/ /*BlockStateModel*/ /*?} els
 			return true;
 		});
 
-		if (parent instanceof FabricBakedModel fabricParent) {
+		if (parent instanceof FabricBakedModel) {
+			FabricBakedModel fabricParent = parent;
 			fabricParent.emitBlockQuads(blockView, state, pos, randomSupplier, context);
 		}
 
@@ -111,7 +114,8 @@ public class SwayModel implements /*? >= 1.21.2 {*/ /*BlockStateModel*/ /*?} els
 
 	@Override
 	public void emitItemQuads(net.minecraft.world.item.ItemStack stack, Supplier<RandomSource> randomSupplier, RenderContext context) {
-		if (parent instanceof FabricBakedModel fabricParent) {
+		if (parent instanceof FabricBakedModel) {
+			FabricBakedModel fabricParent = parent;
 			fabricParent.emitItemQuads(stack, randomSupplier, context);
 		}
 	}
