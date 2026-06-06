@@ -5,7 +5,7 @@ import com.example.modtemplate.api.SwayAPI;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.resources./*? >= 1.21.11 {*/ /*Identifier*/ /*?} else {*/ ResourceLocation /*?} */;
+import net.minecraft.resources./*? >= 1.21.11 {*/ Identifier /*?} else {*/ /*ResourceLocation *//*?} */;
 
 import java.util.Optional;
 
@@ -25,10 +25,10 @@ public class SwayRegistry {
 		reg(Blocks.BRAIN_CORAL, Blocks.DEAD_BRAIN_CORAL, Blocks.BUBBLE_CORAL, Blocks.DEAD_BUBBLE_CORAL, Blocks.FIRE_CORAL, Blocks.DEAD_FIRE_CORAL, Blocks.HORN_CORAL, Blocks.DEAD_HORN_CORAL, Blocks.BRAIN_CORAL_FAN, Blocks.DEAD_BRAIN_CORAL_FAN, Blocks.BUBBLE_CORAL_FAN, Blocks.DEAD_BUBBLE_CORAL_FAN, Blocks.FIRE_CORAL_FAN, Blocks.DEAD_FIRE_CORAL_FAN, Blocks.HORN_CORAL_FAN, Blocks.DEAD_HORN_CORAL_FAN, Blocks.SEAGRASS, Blocks.TALL_SEAGRASS, Blocks.SEA_PICKLE, Blocks.LILY_PAD);
 		reg(Blocks.WHEAT, Blocks.CARROTS, Blocks.POTATOES, Blocks.BEETROOTS, Blocks.NETHER_WART);
 		//? >1.20.1 {
-		//reg(Blocks.SHORT_GRASS);
+		reg(Blocks.SHORT_GRASS);
 		//?}
 		//? >1.21.1 {
-		//reg(Blocks.CLOSED_EYEBLOSSOM, Blocks.OPEN_EYEBLOSSOM, Blocks.PALE_OAK_SAPLING);
+		reg(Blocks.CLOSED_EYEBLOSSOM, Blocks.OPEN_EYEBLOSSOM, Blocks.PALE_OAK_SAPLING);
 		//?}
 
 		regOpt("minecraft:grass");
@@ -45,8 +45,9 @@ public class SwayRegistry {
 
 	private static void regOpt(String id) {
 		try {
-			/*? >= 1.21.11 {*/ /*Identifier*/ /*?} else {*/
-			ResourceLocation /*?} */ identifier = /*? >= 1.21.11 {*/ /*Identifier*/ /*?} else {*/ ResourceLocation /*?} */ /*? >1.20.1 */./*? >1.20.1 {*//*parse*//*?} <=1.21.1 { */ tryParse/*?} */(id);
+			/*? >= 1.21.11 {*/ Identifier /*?} else {*/
+			/*ResourceLocation *//*?} */ identifier = /*? >= 1.21.11 {*/ Identifier /*?} else {*/ /*ResourceLocation *//*?} */
+			./*? >1.20.1 {*/parse/*?} else { */ /*tryParse*//*?} */(id);
 			Optional<Block> block = BuiltInRegistries.BLOCK.getOptional(identifier);
 			block.ifPresent(b -> {
 				if (b != Blocks.AIR) SwayAPI.register(b, 1.0F);

@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(LevelRenderer.class)
 public class LevelRendererMixin {
 	@Inject(method = "renderLevel", at = @At("HEAD"))
-	private void sway$onRender(CallbackInfo ci) {
+	private void sway$renderLevel(CallbackInfo ci) {
 		SwayEngine.update();
 	}
 }

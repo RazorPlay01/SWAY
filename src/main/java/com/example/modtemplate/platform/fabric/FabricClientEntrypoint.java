@@ -18,12 +18,12 @@ public class FabricClientEntrypoint implements ClientModInitializer {
 
 		ModelLoadingPlugin.register(ctx -> {
 			//? >1.21.1 {
-			/*ctx.modifyBlockModelAfterBake().register((model, context) -> {
+			ctx.modifyBlockModelAfterBake().register((model, context) -> {
 				if (SwayAPI.isInteractive(context.state().getBlock())) {
 					return new SwayModel(model);
 				}
 				return model;
-			});*/
+			});
 			//?}
 			//? >1.20.1 && <=1.21.1 {
 			/*ctx.modifyModelAfterBake().register((model, context) -> {
@@ -51,10 +51,10 @@ public class FabricClientEntrypoint implements ClientModInitializer {
 						.filter(SwayAPI::isInteractive)
 						.map(block -> (net.minecraft.client.resources.model.BakedModel) new SwayModel(model))
 						.orElse(model);
-			});*/
-			//?}
+			});
+			*///?}
 			//? <=1.20.1{
-			ctx.modifyModelAfterBake().register((model, context) -> {
+			/*ctx.modifyModelAfterBake().register((model, context) -> {
 				var modelId = context.id();
 				if (modelId == null) {
 					return model;
@@ -86,7 +86,7 @@ public class FabricClientEntrypoint implements ClientModInitializer {
 					return model;
 				}
 			});
-			//?}
+			*///?}
 		});
 	}
 

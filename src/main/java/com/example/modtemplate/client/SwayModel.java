@@ -1,10 +1,7 @@
 package com.example.modtemplate.client;
 
-import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
-import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.ItemOverrides;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.Minecraft;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -13,35 +10,36 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 
 //? <=1.21.1 {
-import net.minecraft.client.resources.model.BakedModel;
-//?}
+/*import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+*///?}
 //? >1.21.1 && <26 {
 /*import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.block.model.BlockStateModel;*/
-//?}
+import net.minecraft.client.renderer.block.model.BlockStateModel;
+*///?}
 //? <26 {
-import net.minecraft.world.level.BlockAndTintGetter;
+/*import net.minecraft.world.level.BlockAndTintGetter;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import org.jetbrains.annotations.Nullable;
-//?}
+*///?}
 //? >=26 {
-/*import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.fabricmc.fabric.api.client.renderer.v1.mesh.QuadEmitter;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.resources.model.sprite.Material;
-*///?}
+//?}
 
 import java.util.function.Predicate;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class SwayModel implements /*? >= 1.21.2 {*/ /*BlockStateModel*/ /*?} else {*/ BakedModel /*?} */ {
-	private final /*? >= 1.21.2 {*/ /*BlockStateModel*/ /*?} else {*/ BakedModel /*?} */ parent;
+public class SwayModel implements /*? >= 1.21.2 {*/ BlockStateModel /*?} else {*/ /*BakedModel *//*?} */ {
+	private final /*? >= 1.21.2 {*/ BlockStateModel /*?} else {*/ /*BakedModel *//*?} */ parent;
 
-	public SwayModel(/*? >= 1.21.2 {*/ /*BlockStateModel*/ /*?} else {*/ BakedModel /*?} */ parent) {
+	public SwayModel(/*? >= 1.21.2 {*/ BlockStateModel /*?} else {*/ /*BakedModel *//*?} */ parent) {
 		this.parent = parent;
 	}
 
@@ -53,7 +51,7 @@ public class SwayModel implements /*? >= 1.21.2 {*/ /*BlockStateModel*/ /*?} els
 	}
 
 	//? <= 1.21.1 {
-	@Override
+	/*@Override
 	public List<BakedQuad> getQuads(@Nullable BlockState blockState, @Nullable Direction direction, RandomSource randomSource) {
 		return this.parent.getQuads(blockState, direction, randomSource);
 	}
@@ -64,11 +62,10 @@ public class SwayModel implements /*? >= 1.21.2 {*/ /*BlockStateModel*/ /*?} els
 	}
 
 	@Override
-	public void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context) {
+	public void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, net.fabricmc.fabric.api.renderer.v1.render.RenderContext context) {
 		if (blockView == null || pos == null || state == null) {
-			if (parent instanceof FabricBakedModel) {
-				FabricBakedModel fabricParent = parent;
-				fabricParent.emitBlockQuads(blockView, state, pos, randomSupplier, context);
+			if (parent instanceof net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel) {
+				((net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel) parent).emitBlockQuads(blockView, state, pos, randomSupplier, context);
 			}
 			return;
 		}
@@ -83,15 +80,16 @@ public class SwayModel implements /*? >= 1.21.2 {*/ /*BlockStateModel*/ /*?} els
 
 		SwayData data = SwayEngine.get(swayPos);
 		if (data == null || data.intensity < 0.01F) {
-			if (parent instanceof FabricBakedModel) {
-				FabricBakedModel fabricParent = parent;
-				fabricParent.emitBlockQuads(blockView, state, pos, randomSupplier, context);
+			if (parent instanceof net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel) {
+				((net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel) parent).emitBlockQuads(blockView, state, pos, randomSupplier, context);
 			}
 			return;
 		}
 
-		final float dx = data.nx * data.intensity * 0.45F;
-		final float dz = data.nz * data.intensity * 0.45F;
+		SwayData interpolated = data.getInterpolated(SwayEngine.getSmoothness());
+
+		final float dx = interpolated.nx * interpolated.intensity * 0.45F;
+		final float dz = interpolated.nz * interpolated.intensity * 0.45F;
 
 		context.pushTransform(quad -> {
 			for (int i = 0; i < 4; i++) {
@@ -104,18 +102,17 @@ public class SwayModel implements /*? >= 1.21.2 {*/ /*BlockStateModel*/ /*?} els
 			return true;
 		});
 
-		if (parent instanceof FabricBakedModel) {
-			FabricBakedModel fabricParent = parent;
-			fabricParent.emitBlockQuads(blockView, state, pos, randomSupplier, context);
+		if (parent instanceof net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel) {
+			((net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel) parent).emitBlockQuads(blockView, state, pos, randomSupplier, context);
 		}
 
 		context.popTransform();
 	}
 
 	@Override
-	public void emitItemQuads(net.minecraft.world.item.ItemStack stack, Supplier<RandomSource> randomSupplier, RenderContext context) {
-		if (parent instanceof FabricBakedModel) {
-			FabricBakedModel fabricParent = parent;
+	public void emitItemQuads(net.minecraft.world.item.ItemStack stack, Supplier<RandomSource> randomSupplier, net.fabricmc.fabric.api.renderer.v1.render.RenderContext context) {
+		if (parent instanceof net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel) {
+			net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel fabricParent = parent;
 			fabricParent.emitItemQuads(stack, randomSupplier, context);
 		}
 	}
@@ -146,17 +143,17 @@ public class SwayModel implements /*? >= 1.21.2 {*/ /*BlockStateModel*/ /*?} els
 	}
 
 	@Override
-	public ItemTransforms getTransforms() {
+	public net.minecraft.client.renderer.block.model.ItemTransforms getTransforms() {
 		return this.parent.getTransforms();
 	}
 
 	@Override
-	public ItemOverrides getOverrides() {
+	public net.minecraft.client.renderer.block.model.ItemOverrides getOverrides() {
 		return this.parent.getOverrides();
 	}
-	//?}
+	*///?}
 	//? >= 1.21.2 {
-	/*@Override
+	@Override
 	public void emitQuads(QuadEmitter emitter, BlockAndTintGetter view, BlockPos pos, BlockState state, RandomSource random, Predicate<Direction> cull) {
 		if (emitter == null || pos == null || state == null) {
 			this.parent.emitQuads(emitter, view, pos, state, random, cull);
@@ -169,8 +166,10 @@ public class SwayModel implements /*? >= 1.21.2 {*/ /*BlockStateModel*/ /*?} els
 			return;
 		}
 
-		final float dx = data.nx * data.intensity * 0.45F;
-		final float dz = data.nz * data.intensity * 0.45F;
+		SwayData interpolated = data.getInterpolated(SwayEngine.getSmoothness());
+
+		final float dx = interpolated.nx * interpolated.intensity * 0.45F;
+		final float dz = interpolated.nz * interpolated.intensity * 0.45F;
 
 		emitter.pushTransform(quad -> {
 			for (int i = 0; i < 4; i++) {
@@ -185,7 +184,7 @@ public class SwayModel implements /*? >= 1.21.2 {*/ /*BlockStateModel*/ /*?} els
 
 		this.parent.emitQuads(emitter, view, pos, state, random, cull);
 		emitter.popTransform();
-	}*/
+	}
 	//?}
 
 	//? >=1.21.2 && <26 {
@@ -197,10 +196,10 @@ public class SwayModel implements /*? >= 1.21.2 {*/ /*BlockStateModel*/ /*?} els
 	@Override
 	public TextureAtlasSprite particleIcon() {
 		return this.parent.particleIcon();
-	}*/
-	//?}
+	}
+	*///?}
 	//? >=26 {
-	/*@Override
+	@Override
 	public void collectParts(RandomSource random, List<BlockStateModelPart> output) {
 		this.parent.collectParts(random, output);
 	}
@@ -214,5 +213,5 @@ public class SwayModel implements /*? >= 1.21.2 {*/ /*BlockStateModel*/ /*?} els
 	public @BakedQuad.MaterialFlags int materialFlags() {
 		return this.parent.materialFlags();
 	}
-	*///?}
+	//?}
 }

@@ -12,9 +12,6 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-/**
- * Optimized configuration for the Sway mod.
- */
 public class SwayConfig {
     private static final Logger LOGGER = LoggerFactory.getLogger("Sway/Config");
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
