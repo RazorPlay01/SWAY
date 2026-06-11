@@ -24,6 +24,13 @@ platform {
 		optional("modmenu") {}
 	}
 }
+mixins {
+	client {
+		always(
+			"LevelRendererMixin"
+		)
+	}
+}
 
 loom {
 	accessWidenerPath = rootProject.file("src/main/resources/aw/${stonecutter.current.version}.accesswidener")

@@ -2,8 +2,6 @@ package com.github.razorplay01.sway.api;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 
 import java.util.Collections;
 import java.util.IdentityHashMap;

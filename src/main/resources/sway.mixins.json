@@ -6,8 +6,6 @@
   "injectors": {
     "defaultRequire": 1
   },
-  "mixins": [],
-  "client": [
-    "LevelRendererMixin"
-  ]
+  "mixins": ${common_array},
+  "client": ${client_array}
 }

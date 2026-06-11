@@ -19,7 +19,14 @@ platform {
 		}
 	}
 }
-
+mixins {
+	client {
+		always(
+			"LevelRendererMixin",
+			"ModelBlockRendererMixin"
+		)
+	}
+}
 neoForge {
 	version = prop("deps.neoforge")
 	accessTransformers.from(rootProject.file("src/main/resources/aw/${stonecutter.current.version}.cfg"))

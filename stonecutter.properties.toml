@@ -1,7 +1,7 @@
 mod.id = "sway"
 mod.name = "SWAY"
 mod.group = "com.github.razorplay01"
-mod.version = "1.0.0"
+mod.version = "1.1.0"
 mod.channel_tag = ""
 mod.description = "Realistic foliage interaction and deformation for Minecraft."
 mod.authors = ["RazorPlay01"]

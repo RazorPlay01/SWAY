@@ -1,6 +1,5 @@
 package com.github.razorplay01.sway.client;
-
-import net.minecraft.client.Minecraft;
+//? fabric {
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -215,3 +214,4 @@ public class SwayModel implements /*? >= 1.21.2 {*/ BlockStateModel /*?} else {*
 	}
 	//?}
 }
+//?}

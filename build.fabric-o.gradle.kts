@@ -24,7 +24,13 @@ platform {
 		optional("modmenu") {}
 	}
 }
-
+mixins {
+	client {
+		always(
+			"LevelRendererMixin"
+		)
+	}
+}
 loom {
 	accessWidenerPath = rootProject.file("src/main/resources/aw/${sc.current.version}.accesswidener")
 	runs.named("client") {
