@@ -15,6 +15,8 @@ import java.util.Optional;
 public class SwayRegistry {
 
 	public static void initialize() {
+		reg(Blocks.SUGAR_CANE);
+		//reg(Blocks.VINE, Blocks.WEEPING_VINES, Blocks.WEEPING_VINES_PLANT, Blocks.TWISTING_VINES, Blocks.TWISTING_VINES_PLANT);
 		reg(Blocks.TALL_GRASS, Blocks.FERN, Blocks.LARGE_FERN);
 		reg(Blocks.DEAD_BUSH, Blocks.SWEET_BERRY_BUSH, Blocks.CAVE_VINES, Blocks.CAVE_VINES_PLANT, Blocks.SMALL_DRIPLEAF, Blocks.BIG_DRIPLEAF, Blocks.BIG_DRIPLEAF_STEM, Blocks.GLOW_LICHEN, Blocks.MOSS_CARPET, Blocks.PITCHER_PLANT, Blocks.PITCHER_CROP, Blocks.TORCHFLOWER, Blocks.TORCHFLOWER_CROP, Blocks.BAMBOO_SAPLING);
 		reg(Blocks.DANDELION, Blocks.POPPY, Blocks.BLUE_ORCHID, Blocks.ALLIUM, Blocks.AZURE_BLUET, Blocks.RED_TULIP, Blocks.ORANGE_TULIP, Blocks.WHITE_TULIP, Blocks.PINK_TULIP, Blocks.OXEYE_DAISY, Blocks.CORNFLOWER, Blocks.LILY_OF_THE_VALLEY, Blocks.WITHER_ROSE, Blocks.SPORE_BLOSSOM);
@@ -45,9 +47,10 @@ public class SwayRegistry {
 
 	private static void regOpt(String id) {
 		try {
-			/*? >= 1.21.11 {*/ Identifier /*?} else {*/
-			/*ResourceLocation *//*?} */ identifier = /*? >= 1.21.11 {*/ Identifier /*?} else {*/ /*ResourceLocation *//*?} */
-			./*? >1.20.1 {*/parse/*?} else { */ /*tryParse*//*?} */(id);
+			/*? >= 1.21.11 {*/
+			Identifier /*?} else {*/
+					/*ResourceLocation *//*?} */ identifier = /*? >= 1.21.11 {*/ Identifier /*?} else {*/ /*ResourceLocation *//*?} */
+					./*? >1.20.1 {*/parse/*?} else { */ /*tryParse*//*?} */(id);
 			Optional<Block> block = BuiltInRegistries.BLOCK.getOptional(identifier);
 			block.ifPresent(b -> {
 				if (b != Blocks.AIR) SwayAPI.register(b, 1.0F);
