@@ -21,6 +21,9 @@ platform {
 		required("fabricloader") {
 			fabricLikeVersionRange = ">=${prop("deps.fabric-loader")}"
 		}
+		required("mc2_interactivefoliage") {
+			fabricLikeVersionRange = "*"
+		}
 		optional("modmenu") {}
 	}
 }
