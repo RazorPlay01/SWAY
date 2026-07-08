@@ -17,8 +17,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SwayEngine {
-    private static final Map<BlockPos, SwayData> CURRENT = new ConcurrentHashMap<>();
-    private static final Map<BlockPos, SwayData> DECAYING = new HashMap<>();
+	private static final Map<BlockPos, SwayData> CURRENT = new ConcurrentHashMap<>();
+	private static final Map<BlockPos, SwayData> DECAYING = new HashMap<>();
 	private static final float THRESHOLD = 0.05F;
 	private static final float DECAY_RATE = 5.0F;
 	private static final float SMOOTHNESS = 8.0F;
@@ -146,8 +146,13 @@ public class SwayEngine {
 
 	private static void mark(Minecraft mc, ClientLevel level, BlockPos pos) {
 		if (level == null) return;
-		BlockState s = level.getBlockState(pos);
+		//? <26.2{
+		/*BlockState s = level.getBlockState(pos);
 		mc.levelRenderer.blockChanged(level, pos, s, s, 0);
+		*///?}
+		//? >=26.2{
+		((com.github.razorplay01.sway.SwayLevelRendererExtension) mc.levelRenderer).sway$markBlockForRerender(level, pos);
+		//?}
 	}
 
 	private static void reset(ClientLevel level) {

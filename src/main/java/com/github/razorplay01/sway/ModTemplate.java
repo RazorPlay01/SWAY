@@ -1,6 +1,7 @@
 package com.github.razorplay01.sway;
 
 import com.github.razorplay01.sway.config.SwayConfig;
+import com.github.razorplay01.sway.config.SwayRegistry;
 import com.github.razorplay01.sway.platform.Platform;
 
 import org.slf4j.Logger;
@@ -18,7 +19,7 @@ import com.github.razorplay01.sway.platform.fabric.FabricPlatform;
 public class ModTemplate {
 
 	public static final String MOD_ID = /*$ mod_id*/ "sway";
-	public static final String MOD_VERSION = /*$ mod_version*/ "1.0.0";
+	public static final String MOD_VERSION = /*$ mod_version*/ "1.1.2";
 	public static final String MOD_FRIENDLY_NAME = /*$ mod_name*/ "SWAY";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
