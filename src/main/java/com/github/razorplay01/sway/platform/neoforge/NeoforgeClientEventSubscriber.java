@@ -15,8 +15,8 @@ import net.neoforged.neoforge.client.event.ModelEvent;
 /^import net.minecraft.client.renderer.block.model.BlockStateModel;
 ^///?}
 //? >=26 {
-/^import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
-^///?}
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+//?}
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,16 +30,16 @@ public class NeoforgeClientEventSubscriber {
 	@SubscribeEvent
 	public static void onModelBaking(ModelEvent.ModifyBakingResult event) {
 		//? <=1.21.1{
-		for (Map.Entry<net.minecraft.client.resources.model.ModelResourceLocation, net.minecraft.client.resources.model.BakedModel> entry : event.getModels().entrySet()) {
+		/^for (Map.Entry<net.minecraft.client.resources.model.ModelResourceLocation, net.minecraft.client.resources.model.BakedModel> entry : event.getModels().entrySet()) {
 			net.minecraft.client.resources.model.ModelResourceLocation location = entry.getKey();
 			Block block = net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(location.id());
 			if (block != null && SwayAPI.isInteractive(block.defaultBlockState().getBlock())) {
 				event.getModels().put(location, new SwayModel(entry.getValue()));
 			}
 		}
-		//?}
+		^///?}
 		//? >1.21.1{
-		/^net.minecraft.client.resources.model.ModelBakery.BakingResult bakingResult = event.getBakingResult();
+		net.minecraft.client.resources.model.ModelBakery.BakingResult bakingResult = event.getBakingResult();
 		Map<net.minecraft.world.level.block.state.BlockState, BlockStateModel> blockModels = bakingResult.blockStateModels();
 		Map<net.minecraft.world.level.block.state.BlockState, BlockStateModel> copy = new HashMap<>(blockModels);
 		for (Map.Entry<net.minecraft.world.level.block.state.BlockState, BlockStateModel> entry : copy.entrySet()) {
@@ -49,7 +49,7 @@ public class NeoforgeClientEventSubscriber {
 				blockModels.put(state, new SwayModel(entry.getValue()));
 			}
 		}
-		^///?}
+		//?}
 	}
 }
 *///?}
