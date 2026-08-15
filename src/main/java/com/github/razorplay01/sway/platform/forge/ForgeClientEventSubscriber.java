@@ -6,6 +6,7 @@ package com.github.razorplay01.sway.platform.forge;
 import com.github.razorplay01.sway.api.SwayAPI;
 import com.github.razorplay01.sway.platform.forge.util.SwayModel;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -28,8 +29,9 @@ public class ForgeClientEventSubscriber {
 		int wrapped = 0;
 		for (Map.Entry<ResourceLocation, BakedModel> entry : event.getModels().entrySet()) {
 			ResourceLocation location = entry.getKey();
-			Block block = net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(location);
-			if (block != null && SwayAPI.isInteractive(block.defaultBlockState().getBlock())) {
+			ResourceLocation blockId = new ResourceLocation(location.getNamespace(), location.getPath());
+			Block block = net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(blockId);
+			if (block != null && block != Blocks.AIR && SwayAPI.isInteractive(block)) {
 				event.getModels().put(location, new SwayModel(entry.getValue()));
 				wrapped++;
 			}

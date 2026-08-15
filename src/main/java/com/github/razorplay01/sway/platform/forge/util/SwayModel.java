@@ -1,7 +1,8 @@
 package com.github.razorplay01.sway.platform.forge.util;
 //? forge {
 
-/*import com.github.razorplay01.sway.api.SwayAPI;
+/*import com.github.razorplay01.sway.SwayRenderContext;
+import com.github.razorplay01.sway.api.SwayAPI;
 import com.github.razorplay01.sway.api.behavior.BehaviorPipeline;
 import com.github.razorplay01.sway.client.SwayData;
 import com.github.razorplay01.sway.client.SwayEngine;
@@ -18,24 +19,21 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
-import net.minecraft.world.level.BlockAndTintGetter;
 //? <=1.21.1 {
 /^import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 ^///?}
+//? neoforge && <=1.21.1{
+/^import net.neoforged.neoforge.client.model.data.ModelData;
+ ^///?}
 //? forge && <=1.21.1 {
-/^import net.minecraftforge.client.extensions.IForgeBakedModel;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.client.model.data.ModelProperty;
+/^import net.minecraftforge.client.model.data.ModelData;
 ^///?}
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SwayModel implements BakedModel, IForgeBakedModel {
-
-	public static final ModelProperty<SwayData> SWAY_DATA = new ModelProperty<>();
-	public static final ModelProperty<BlockPos> SWAY_POS = new ModelProperty<>();
+public class SwayModel implements BakedModel {
 
 	private final BakedModel parent;
 
@@ -114,43 +112,23 @@ public class SwayModel implements BakedModel, IForgeBakedModel {
 
 	@Override
 	public List<BakedQuad> getQuads(BlockState state, Direction side, RandomSource rand) {
-		return getQuads(state, side, rand, ModelData.EMPTY, null);
-	}
-
-	@Override
-	public List<BakedQuad> getQuads(BlockState state, Direction side, RandomSource rand,
-	                                ModelData extraData, net.minecraft.client.renderer.RenderType renderType) {
 		if (state == null) {
-			return parent.getQuads(null, side, rand, extraData, renderType);
+			return parent.getQuads(null, side, rand);
 		}
 
-		SwayData data = extraData.get(SWAY_DATA);
-		if (data == null || data.intensity < 0.01F) {
-			com.github.razorplay01.sway.ModTemplate.LOGGER.info("[SWAY-DIAG] getQuads pos={} -> NO SWAY_DATA in ModelData", extraData.get(SWAY_POS));
-			return parent.getQuads(state, side, rand, extraData, renderType);
+		BlockPos pos = SwayRenderContext.getCurrentBlockPos();
+		if (pos == null) {
+			return parent.getQuads(state, side, rand);
 		}
 
-		BlockPos pos = extraData.get(SWAY_POS);
-		com.github.razorplay01.sway.ModTemplate.LOGGER.info("[SWAY-DIAG] getQuads TRANSFORM pos={} data={} {}", pos, data.nx, data.intensity);
-		List<BakedQuad> originalQuads = parent.getQuads(state, side, rand, extraData, renderType);
-		return transformQuads(originalQuads, state, data, pos);
-	}
-
-	@Override
-	public ModelData getModelData(BlockAndTintGetter level, BlockPos pos, BlockState state, ModelData modelData) {
 		BlockPos swayPos = resolveSwayPos(pos, state);
 		SwayData data = SwayEngine.get(swayPos);
 		if (data == null || data.intensity < 0.01F) {
-			com.github.razorplay01.sway.ModTemplate.LOGGER.info("[SWAY-DIAG] getModelData pos={} swayPos={} -> NO DATA", pos, swayPos);
-			return modelData;
+			return parent.getQuads(state, side, rand);
 		}
 
-		com.github.razorplay01.sway.ModTemplate.LOGGER.info("[SWAY-DIAG] getModelData pos={} swayPos={} -> DATA {} {}",
-				pos, swayPos, data.nx, data.intensity);
-		return modelData.derive()
-				.with(SWAY_POS, pos)
-				.with(SWAY_DATA, data)
-				.build();
+		List<BakedQuad> originalQuads = parent.getQuads(state, side, rand);
+		return transformQuads(originalQuads, state, data, pos);
 	}
 
 	@Override
