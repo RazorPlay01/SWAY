@@ -24,7 +24,7 @@ public class HangingVineDeformation implements DeformationContributor {
 
 	@Override
 	public float getVertexWeight(float vertexY, BlockState state, BlockPos pos) {
-		if (!HangingVineMultiblockBehavior.isHangingVine(state)) {
+		if (pos == null || !HangingVineMultiblockBehavior.isHangingVine(state)) {
 			return vertexY > 0.05F ? vertexY * vertexY : 0.0F;
 		}
 
