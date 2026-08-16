@@ -12,24 +12,34 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * MultiBlock behavior for vines that HANG DOWN from ceilings.
  * The anchor is the TOP block (attached to the ceiling), and linked
  * blocks are those hanging BELOW the anchor.
  *
- * <p>Reusable for any mod that adds hanging vines.</p>
+ * <p>Reusable for any mod that adds hanging vines. Use
+ * {@link #addBlock(net.minecraft.world.level.block.Block)} to register
+ * additional blocks as hanging vines.</p>
  */
 public class HangingVineMultiblockBehavior implements MultiBlockContributor {
 	public static final HangingVineMultiblockBehavior INSTANCE = new HangingVineMultiblockBehavior();
 
-	public static final Set<Block> HANGING_VINES = Set.of(
-			Blocks.VINE,
-			Blocks.WEEPING_VINES,
-			Blocks.WEEPING_VINES_PLANT,
-			Blocks.CAVE_VINES,
-			Blocks.CAVE_VINES_PLANT
-	);
+	private static final Set<Block> HANGING_VINES = ConcurrentHashMap.newKeySet();
+
+	static {
+		HANGING_VINES.add(Blocks.VINE);
+		HANGING_VINES.add(Blocks.WEEPING_VINES);
+		HANGING_VINES.add(Blocks.WEEPING_VINES_PLANT);
+		HANGING_VINES.add(Blocks.CAVE_VINES);
+		HANGING_VINES.add(Blocks.CAVE_VINES_PLANT);
+	}
+
+	/** Makes the given block behave as a hanging vine (anchor at the top). */
+	public static void addBlock(Block block) {
+		HANGING_VINES.add(block);
+	}
 
 	public static boolean isHangingVine(BlockState state) {
 		return HANGING_VINES.contains(state.getBlock());

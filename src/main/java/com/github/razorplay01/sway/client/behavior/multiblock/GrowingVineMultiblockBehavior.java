@@ -12,21 +12,31 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * MultiBlock behavior for vines that GROW UP from the ground.
  * The anchor is the BOTTOM block (rooted in the ground), and linked
  * blocks are those growing ABOVE the anchor.
  *
- * <p>Reusable for any mod that adds growing vines.</p>
+ * <p>Reusable for any mod that adds growing vines. Use
+ * {@link #addBlock(net.minecraft.world.level.block.Block)} to register
+ * additional blocks as growing vines.</p>
  */
 public class GrowingVineMultiblockBehavior implements MultiBlockContributor {
 	public static final GrowingVineMultiblockBehavior INSTANCE = new GrowingVineMultiblockBehavior();
 
-	public static final Set<Block> GROWING_VINES = Set.of(
-			Blocks.TWISTING_VINES,
-			Blocks.TWISTING_VINES_PLANT
-	);
+	private static final Set<Block> GROWING_VINES = ConcurrentHashMap.newKeySet();
+
+	static {
+		GROWING_VINES.add(Blocks.TWISTING_VINES);
+		GROWING_VINES.add(Blocks.TWISTING_VINES_PLANT);
+	}
+
+	/** Makes the given block behave as a growing vine (anchor at the bottom). */
+	public static void addBlock(Block block) {
+		GROWING_VINES.add(block);
+	}
 
 	public static boolean isGrowingVine(BlockState state) {
 		return GROWING_VINES.contains(state.getBlock());
