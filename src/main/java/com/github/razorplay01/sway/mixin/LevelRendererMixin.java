@@ -16,8 +16,6 @@ public class LevelRendererMixin implements SwayLevelRendererExtension {
 			com.mojang.blaze3d.resource.GraphicsResourceAllocator resourceAllocator, net.minecraft.client.DeltaTracker deltaTracker, boolean renderOutline, net.minecraft.client.renderer.state.level.CameraRenderState cameraState, org.joml.Matrix4fc modelViewMatrix, com.mojang.blaze3d.buffers.GpuBufferSlice terrainFog, org.joml.Vector4f fogColor, boolean shouldRenderSky, CallbackInfo ci
 	) {
 		sway$markedSections.clear();
-		sway$regionCache = new net.minecraft.client.renderer.chunk.RenderRegionCache();
-
 		SwayEngine.update();
 	}
 	//?}
@@ -29,33 +27,55 @@ public class LevelRendererMixin implements SwayLevelRendererExtension {
 	*///?}
 
 	//? >=26.2{
-	@org.spongepowered.asm.mixin.Shadow
-	private net.minecraft.client.renderer.state.level.LevelRenderState levelRenderState;
-
-	@org.spongepowered.asm.mixin.Unique
-	private static net.minecraft.client.renderer.chunk.RenderRegionCache sway$regionCache = new net.minecraft.client.renderer.chunk.RenderRegionCache();
-
 	@org.spongepowered.asm.mixin.Unique
 	private static final java.util.Set<Long> sway$markedSections = java.util.Collections.newSetFromMap(new java.util.concurrent.ConcurrentHashMap<>());
+
+	@org.spongepowered.asm.mixin.Unique
+	private static Boolean sway$hasSodium;
+
+	@org.spongepowered.asm.mixin.Unique
+	private static boolean sway$sodiumScheduleRebuild(net.minecraft.client.multiplayer.ClientLevel level, net.minecraft.core.BlockPos pos) {
+		try {
+			if (sway$hasSodium == null) {
+				sway$hasSodium = com.github.razorplay01.sway.ModTemplate.xplat().isModLoaded("sodium");
+			}
+			if (!sway$hasSodium) return false;
+
+			// Sodium replaces the vanilla ViewArea with IgnoringViewArea, whose
+			// getRenderSection always returns null. Adding a SectionUpdateRenderState
+			// to LevelRenderState then makes vanilla compileSections NPE. Schedule the
+			// rebuild through Sodium's own renderer instead.
+			Class<?> clazz = Class.forName("net.caffeinemc.mods.sodium.client.render.SodiumWorldRenderer");
+			Object renderer = clazz.getMethod("instanceNullable").invoke(null);
+			if (renderer == null) return true;
+
+			clazz.getMethod("scheduleRebuildForBlockArea",
+							int.class, int.class, int.class, int.class, int.class, int.class, boolean.class)
+					.invoke(renderer, pos.getX(), pos.getY(), pos.getZ(),
+							pos.getX(), pos.getY(), pos.getZ(), false);
+			return true;
+		} catch (ReflectiveOperationException | RuntimeException e) {
+			return false;
+		}
+	}
 
 	//?}
 
 	@Override
 	public void sway$markBlockForRerender(net.minecraft.client.multiplayer.ClientLevel level, net.minecraft.core.BlockPos pos) {
 		//? >=26.2{
-		if (level == null || this.levelRenderState == null) return;
+		if (level == null || pos == null) return;
 
-		int sx = net.minecraft.core.SectionPos.blockToSectionCoord(pos.getX());
 		int sy = net.minecraft.core.SectionPos.blockToSectionCoord(pos.getY());
 		int sz = net.minecraft.core.SectionPos.blockToSectionCoord(pos.getZ());
+		int sx = net.minecraft.core.SectionPos.blockToSectionCoord(pos.getX());
 		long sectionNode = net.minecraft.core.SectionPos.asLong(sx, sy, sz);
-
 		if (!sway$markedSections.add(sectionNode)) return;
 
-		net.minecraft.client.renderer.chunk.RenderSectionRegion region = sway$regionCache.createRegion(level, sectionNode);
-		this.levelRenderState.sectionUpdateRenderStates.add(
-				new net.minecraft.client.renderer.state.level.SectionUpdateRenderState(sectionNode, false, region)
-		);
+		// With Sodium the vanilla section update list is unusable (see helper).
+		if (sway$sodiumScheduleRebuild(level, pos)) return;
+
+		level.setSectionDirtyWithNeighbors(sx, sy, sz);
 		//?}
 	}
 }
