@@ -33,6 +33,13 @@ public class ProximityForceBehavior implements ForceContributor {
 			return;
 		}
 
+		// Vertical overlap check (Y): only blocks that actually intersect the
+		// entity's exact hitbox on the Y axis can be affected. This prevents
+		// plants/vines several blocks above the entity from reacting.
+		if (entityBox.maxY <= blockBox.minY || entityBox.minY >= blockBox.maxY) {
+			return;
+		}
+
 		// Compute overlap amount to determine force intensity (gradual effect)
 		double overlapX = Math.min(entityBox.maxX, blockBox.maxX) - Math.max(entityBox.minX, blockBox.minX);
 		double overlapZ = Math.min(entityBox.maxZ, blockBox.maxZ) - Math.max(entityBox.minZ, blockBox.minZ);
