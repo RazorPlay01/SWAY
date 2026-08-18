@@ -4,12 +4,12 @@ import com.github.razorplay01.sway.api.behavior.BehaviorKey;
 import com.github.razorplay01.sway.api.behavior.SwayBehavior;
 
 import java.util.Collections;
-import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class BehaviorRegistry {
-	private static final Map<BehaviorKey, SwayBehavior> REGISTRY = Collections.synchronizedMap(new IdentityHashMap<>());
+	private static final Map<BehaviorKey, SwayBehavior> REGISTRY = new ConcurrentHashMap<>();
 
 	private BehaviorRegistry() {}
 

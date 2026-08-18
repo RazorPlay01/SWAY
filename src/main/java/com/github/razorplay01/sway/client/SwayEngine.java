@@ -91,6 +91,7 @@ public class SwayEngine {
 					DECAYING.put(p, data);
 					markIfChanged(p, data);
 				} else {
+					data.update(data.nx, data.nz, 0.0F);
 					markIfChanged(p, data);
 				}
 			}
@@ -100,11 +101,10 @@ public class SwayEngine {
 			blockPosMarkIfChanged(entry.getKey(), entry.getValue());
 		}
 
-		LAST_MARKED.keySet().removeIf(p -> !CURRENT.containsKey(p) && !next.containsKey(p) && !DECAYING.containsKey(p));
-
-		CURRENT.clear();
 		CURRENT.putAll(next);
 		CURRENT.putAll(DECAYING);
+		CURRENT.keySet().removeIf(p -> !next.containsKey(p) && !DECAYING.containsKey(p));
+		LAST_MARKED.keySet().removeIf(p -> !CURRENT.containsKey(p));
 
 		long now = System.currentTimeMillis();
 		if (now - lastUpdateLog > 2000L) {
@@ -130,39 +130,8 @@ public class SwayEngine {
 			anchor = mb.getAnchorPosition(anchor, state);
 		}
 
-		AABB entityBox = entity.getBoundingBox();
-		AABB blockBox = new AABB(mpos.getX(), mpos.getY(), mpos.getZ(),
-				mpos.getX() + 1.0, mpos.getY() + 1.0, mpos.getZ() + 1.0);
-
-		if (entityBox.maxX <= blockBox.minX || entityBox.minX >= blockBox.maxX ||
-				entityBox.maxZ <= blockBox.minZ || entityBox.minZ >= blockBox.maxZ) {
-			return;
-		}
-
-		double overlapX = Math.min(entityBox.maxX, blockBox.maxX) - Math.max(entityBox.minX, blockBox.minX);
-		double overlapZ = Math.min(entityBox.maxZ, blockBox.maxZ) - Math.max(entityBox.minZ, blockBox.minZ);
-		float overlapFactor = (float) Math.min(1.0, Math.max(overlapX, overlapZ)); // 0.0 to 1.0
-
-		if (overlapFactor <= 0.01F) return;
-
 		ForceAccumulator acc = ACCUMULATOR.get();
 		acc.reset();
-
-		double blockCenterX = mpos.getX() + 0.5;
-		double blockCenterZ = mpos.getZ() + 0.5;
-		double entityCenterX = (entityBox.minX + entityBox.maxX) / 2.0;
-		double entityCenterZ = (entityBox.minZ + entityBox.maxZ) / 2.0;
-
-		double dx = blockCenterX - entityCenterX;
-		double dz = blockCenterZ - entityCenterZ;
-		double d = Math.sqrt(dx * dx + dz * dz);
-
-		float force = baseIntensity * overlapFactor;
-		if (force <= 0.01F) return;
-
-		float nx = d > 0.001 ? (float) (dx / d) : 1.0F;
-		float nz = d > 0.001 ? (float) (dz / d) : 0.0F;
-		acc.contribute(nx, nz, force, ForceAccumulator.CombineStrategy.ADD);
 
 		for (ForceContributor fc : pipeline.getForceContributors()) {
 			fc.contributeForce(mpos, state, entity, ctx, acc);
@@ -171,6 +140,9 @@ public class SwayEngine {
 		if (!acc.hasAnyContribution()) return;
 
 		float capped = Math.min(acc.getIntensity(), baseIntensity * 2);
+		for (ForceContributor fc : pipeline.getForceContributors()) {
+			capped = fc.clampMaxIntensity(capped, ctx);
+		}
 		if (capped <= 0.01F) return;
 
 		BlockPos immutablePos = mpos.immutable();
@@ -180,8 +152,10 @@ public class SwayEngine {
 		}
 
 		for (MultiBlockContributor mb : pipeline.getMultiBlockContributors()) {
-			for (BlockPos linked : mb.getLinkedBlocks(anchor, state, level)) {
-				applyAccumulatorToPos(acc, linked.immutable(), next, capped);
+			if (mb.shouldPropagateForceToLinked()) {
+				for (BlockPos linked : mb.getLinkedBlocks(anchor, state, level)) {
+					applyAccumulatorToPos(acc, linked.immutable(), next, capped);
+				}
 			}
 		}
 	}

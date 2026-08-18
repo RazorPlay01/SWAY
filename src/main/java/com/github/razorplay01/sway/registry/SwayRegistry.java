@@ -16,10 +16,14 @@ import java.util.Optional;
  * Handles internal registration of default Minecraft foliage.
  */
 public class SwayRegistry {
+	private static volatile boolean initialized = false;
 
 	public static void initialize() {
-		registerSugarCane();
-		registerVines();
+		if (initialized) return;
+		synchronized (SwayRegistry.class) {
+			if (initialized) return;
+			registerSugarCane();
+			registerVines();
 		reg(Blocks.TALL_GRASS, Blocks.FERN, Blocks.LARGE_FERN);
 		reg(Blocks.DEAD_BUSH, Blocks.SWEET_BERRY_BUSH, Blocks.SMALL_DRIPLEAF, Blocks.BIG_DRIPLEAF, Blocks.BIG_DRIPLEAF_STEM, Blocks.GLOW_LICHEN, Blocks.MOSS_CARPET, Blocks.PITCHER_PLANT, Blocks.PITCHER_CROP, Blocks.TORCHFLOWER, Blocks.TORCHFLOWER_CROP, Blocks.BAMBOO_SAPLING);
 		reg(Blocks.DANDELION, Blocks.POPPY, Blocks.BLUE_ORCHID, Blocks.ALLIUM, Blocks.AZURE_BLUET, Blocks.RED_TULIP, Blocks.ORANGE_TULIP, Blocks.WHITE_TULIP, Blocks.PINK_TULIP, Blocks.OXEYE_DAISY, Blocks.CORNFLOWER, Blocks.LILY_OF_THE_VALLEY, Blocks.WITHER_ROSE, Blocks.SPORE_BLOSSOM);
@@ -42,6 +46,8 @@ public class SwayRegistry {
 		regOpt("minecraft:firefly_bush");
 		regOpt("minecraft:short_dry_grass");
 		regOpt("minecraft:tall_dry_grass");
+			initialized = true;
+		}
 	}
 
 	private static void registerSugarCane() {

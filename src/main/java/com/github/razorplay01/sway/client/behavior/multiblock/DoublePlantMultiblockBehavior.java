@@ -26,10 +26,6 @@ public class DoublePlantMultiblockBehavior implements MultiBlockContributor {
 	public Collection<BlockPos> getLinkedBlocks(BlockPos anchorPos, BlockState state, net.minecraft.client.multiplayer.ClientLevel level) {
 		if (!state.hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF)) return List.of();
 
-		List<BlockPos> linked = new ArrayList<>(1);
-		DoubleBlockHalf half = state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF);
-		BlockPos other = (half == DoubleBlockHalf.LOWER) ? anchorPos.above() : anchorPos.below();
-		linked.add(other);
-		return linked;
+		return List.of(anchorPos.above());
 	}
 }

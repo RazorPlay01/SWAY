@@ -39,8 +39,13 @@ public class SwayConfig {
     }
 
     public static void save() {
-        try (Writer writer = Files.newBufferedWriter(PATH)) {
-            GSON.toJson(INSTANCE, writer);
+        try {
+            if (PATH.getParent() != null) {
+                Files.createDirectories(PATH.getParent());
+            }
+            try (Writer writer = Files.newBufferedWriter(PATH)) {
+                GSON.toJson(INSTANCE, writer);
+            }
         } catch (IOException e) {
             LOGGER.error("Failed to save config", e);
         }
