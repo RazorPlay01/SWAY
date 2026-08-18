@@ -29,7 +29,7 @@ import net.minecraft.client.resources.model.BakedModel;
 /^import net.minecraftforge.client.model.data.ModelData;
 ^///?}
 
-@Mixin(value = ModelBlockRenderer.class/^? forge { ^//^,remap = false^//^?} ^/)
+@Mixin(value = ModelBlockRenderer.class)
 public class ModelBlockRendererMixin {
 	//? >1.21.11{
 	@Inject(
@@ -52,7 +52,8 @@ public class ModelBlockRendererMixin {
 	/^//? forge && <=1.21.1{
 	/^¹@Inject(
 			method = "tesselateBlock(Lnet/minecraft/world/level/BlockAndTintGetter;Lnet/minecraft/client/resources/model/BakedModel;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;ZLnet/minecraft/util/RandomSource;JILnet/minecraftforge/client/model/data/ModelData;Lnet/minecraft/client/renderer/RenderType;)V",
-			at = @At("HEAD")
+			at = @At("HEAD"),
+			remap = false
 	)
 	private void captureBlockPos(BlockAndTintGetter p_234380_, BakedModel p_234381_, BlockState p_234382_, BlockPos p_234383_, PoseStack p_234384_, VertexConsumer p_234385_, boolean p_234386_, RandomSource p_234387_, long p_234388_, int p_234389_, ModelData modelData, RenderType renderType, CallbackInfo ci) {
 	¹^///?}
@@ -76,7 +77,8 @@ public class ModelBlockRendererMixin {
 	//? forge && <=1.21.1{
 	/^¹@Inject(
 			method = "tesselateBlock(Lnet/minecraft/world/level/BlockAndTintGetter;Lnet/minecraft/client/resources/model/BakedModel;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;ZLnet/minecraft/util/RandomSource;JILnet/minecraftforge/client/model/data/ModelData;Lnet/minecraft/client/renderer/RenderType;)V",
-			at = @At("RETURN")
+			at = @At("RETURN"),
+			remap = false
 	)
 	private void clearBlockPos(BlockAndTintGetter p_234380_, BakedModel p_234381_, BlockState p_234382_, BlockPos p_234383_, PoseStack p_234384_, VertexConsumer p_234385_, boolean p_234386_, RandomSource p_234387_, long p_234388_, int p_234389_, ModelData modelData, RenderType renderType, CallbackInfo ci) {
 	¹^///?}
@@ -98,12 +100,14 @@ public class ModelBlockRendererMixin {
 		SwayRenderContext.clear();
 	}
 
-	//? <=1.21.1{
+	//? !forge && <=1.21.1{
 	/^¹@Inject(
 			method = "tesselateBlock(Lnet/minecraft/world/level/BlockAndTintGetter;Lnet/minecraft/client/resources/model/BakedModel;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;ZLnet/minecraft/util/RandomSource;JI)V",
 			at = @At("HEAD")
 	)
 	private void captureBlockPosDeprecated(BlockAndTintGetter p_234380_, BakedModel p_234381_, BlockState p_234382_, BlockPos p_234383_, PoseStack p_234384_, VertexConsumer p_234385_, boolean p_234386_, RandomSource p_234387_, long p_234388_, int p_234389_, CallbackInfo ci) {
+	SwayRenderContext.setCurrentBlockPos(p_234383_);
+	}
 	¹^///?}
 	//? >1.21.1 && <=1.21.11{
 	/^¹@Inject(
@@ -111,26 +115,28 @@ public class ModelBlockRendererMixin {
 			at = @At("HEAD")
 	)
 	private void captureBlockPosDeprecated(BlockAndTintGetter p_234380_, List<net.minecraft.client.renderer.block.model.BlockModelPart> p_410025_, BlockState p_234382_, BlockPos p_234383_, PoseStack p_234384_, Function<net.minecraft.client.renderer.chunk.ChunkSectionLayer, VertexConsumer> bufferLookup, boolean p_234386_, int p_234389_, CallbackInfo ci) {
-		¹^///?}
 		SwayRenderContext.setCurrentBlockPos(p_234383_);
 	}
+	¹^///?}
 
-	//? <=1.21.1{
+	//? !forge && <=1.21.1{
 	/^¹@Inject(
 			method = "tesselateBlock(Lnet/minecraft/world/level/BlockAndTintGetter;Lnet/minecraft/client/resources/model/BakedModel;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;ZLnet/minecraft/util/RandomSource;JI)V",
 			at = @At("RETURN")
 	)
 	private void clearBlockPosDeprecated(BlockAndTintGetter p_234380_, BakedModel p_234381_, BlockState p_234382_, BlockPos p_234383_, PoseStack p_234384_, VertexConsumer p_234385_, boolean p_234386_, RandomSource p_234387_, long p_234388_, int p_234389_, CallbackInfo ci) {
-	¹^///?}
+		SwayRenderContext.clear();
+	}
+		¹^///?}
 	//? >1.21.1 && <=1.21.11{
 	/^¹@Inject(
 			method = "tesselateBlock(Lnet/minecraft/world/level/BlockAndTintGetter;Ljava/util/List;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;Lcom/mojang/blaze3d/vertex/PoseStack;Ljava/util/function/Function;ZI)V",
 			at = @At("RETURN")
 	)
 	private void clearBlockPosDeprecated(BlockAndTintGetter p_234380_, List<net.minecraft.client.renderer.block.model.BlockModelPart> p_410025_, BlockState p_234382_, BlockPos p_234383_, PoseStack p_234384_, Function<net.minecraft.client.renderer.chunk.ChunkSectionLayer, VertexConsumer> bufferLookup, boolean p_234386_, int p_234389_, CallbackInfo ci) {
-		¹^///?}
 		SwayRenderContext.clear();
 	}
+		¹^///?}
 	^///?}
 }
 *///?}
