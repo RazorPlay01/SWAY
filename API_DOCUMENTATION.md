@@ -308,6 +308,12 @@ public interface DeformationContributor extends SwayBehavior {
 }
 ```
 
+> **Importante:** `pos` puede ser `null` en ciertas rutas de renderizado (por ejemplo, cuando un
+> renderizador consulta los quads sin contexto de bloque, como ocurre con Sodium en NeoForge 1.21.x
+> antes de la corrección, donde la sobrecarga de `getQuads` no recibe `BlockPos`). Si tu comportamiento
+> necesita la posición (p. ej. para recorrer un multibloque), comprueba `pos == null` y devuelve un
+> peso de respaldo (cuadrático) en ese caso. Nunca lances excepciones desde `getVertexWeight`.
+
 **Ejemplo (deformación cuadrática personalizada):**
 
 ```java

@@ -17,8 +17,9 @@ public class SugarCaneDeformation implements DeformationContributor {
 
 	@Override
 	public float getVertexWeight(float vertexY, BlockState state, BlockPos pos) {
-		// If not a stackable stalk, fall back to default quadratic behavior
-		if (!SugarCaneMultiblockBehavior.isStackable(state)) {
+		// Without a block position (some render paths query quads with no block
+		// context), the stalk cannot be resolved, so fall back to quadratic behavior
+		if (pos == null || !SugarCaneMultiblockBehavior.isStackable(state)) {
 			return vertexY > 0.05F ? vertexY * vertexY : 0.0F;
 		}
 

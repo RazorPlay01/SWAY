@@ -24,7 +24,7 @@ public class GrowingVineDeformation implements DeformationContributor {
 
 	@Override
 	public float getVertexWeight(float vertexY, BlockState state, BlockPos pos) {
-		if (!GrowingVineMultiblockBehavior.isGrowingVine(state)) {
+		if (pos == null || !GrowingVineMultiblockBehavior.isGrowingVine(state)) {
 			return vertexY > 0.05F ? vertexY * vertexY : 0.0F;
 		}
 

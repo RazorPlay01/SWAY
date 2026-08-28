@@ -138,8 +138,13 @@ public class SwayModel implements /^? >= 1.21.2 {^/ /^BlockStateModel ^//^?} els
 			return parent.getQuads(state, side, rand, extraData, renderType);
 		}
 
+		// This Forge overload of getQuads() has no BlockPos parameter, so recover
+		// the block position stored by getModelData() instead of deforming with a
+		// null position (which crashed SugarCaneDeformation when Sodium queried quads).
+		BlockPos pos = extraData.get(SWAY_POS);
+
 		List<BakedQuad> original = parent.getQuads(state, side, rand, extraData, renderType);
-		return transformQuads(original, state, data, null);
+		return transformQuads(original, state, data, pos);
 	}
 	^///?}else{
 	@Override
@@ -359,6 +364,7 @@ public class SwayModel implements /^? >= 1.21.2 {^/ /^BlockStateModel ^//^?} els
 
 	//? 1.21.1 {
 	/^public static final net.neoforged.neoforge.client.model.data.ModelProperty<SwayData> SWAY_DATA = new net.neoforged.neoforge.client.model.data.ModelProperty<>();
+	public static final net.neoforged.neoforge.client.model.data.ModelProperty<BlockPos> SWAY_POS = new net.neoforged.neoforge.client.model.data.ModelProperty<>();
 
 	@Override
 	public ModelData getModelData(net.minecraft.world.level.BlockAndTintGetter level, BlockPos pos, BlockState state, ModelData modelData) {
@@ -370,6 +376,7 @@ public class SwayModel implements /^? >= 1.21.2 {^/ /^BlockStateModel ^//^?} els
 
 		return modelData.derive()
 				.with(SWAY_DATA, data)
+				.with(SWAY_POS, pos.immutable())
 				.build();
 	}
 	^///?}
