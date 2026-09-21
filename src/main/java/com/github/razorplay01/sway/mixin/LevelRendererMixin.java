@@ -10,14 +10,37 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LevelRenderer.class)
 public class LevelRendererMixin implements SwayLevelRendererExtension {
-	//? >=26.2{
+	//? 26.3{
 	@Inject(method = "render", at = @At("HEAD"))
 	private void sway$render(
-			com.mojang.blaze3d.resource.GraphicsResourceAllocator resourceAllocator, net.minecraft.client.DeltaTracker deltaTracker, boolean renderOutline, net.minecraft.client.renderer.state.level.CameraRenderState cameraState, org.joml.Matrix4fc modelViewMatrix, com.mojang.blaze3d.buffers.GpuBufferSlice terrainFog, org.joml.Vector4f fogColor, boolean shouldRenderSky, CallbackInfo ci
+			com.mojang.blaze3d.resource.GraphicsResourceAllocator resourceAllocator,
+			boolean renderOutline,
+			net.minecraft.client.renderer.state.level.CameraRenderState cameraState,
+			com.mojang.renderpearl.api.buffers.GpuBufferSlice terrainFog,
+			org.joml.Vector4f fogColor,
+			boolean shouldRenderSky,
+			boolean consistentDepthRequired,
+			CallbackInfo ci
 	) {
 		sway$markedSections.clear();
 		SwayEngine.update();
 	}
+	//?}
+	//? 26.2{
+	/*@Inject(method = "render", at = @At("HEAD"))
+	private void sway$render(
+			com.mojang.blaze3d.resource.GraphicsResourceAllocator resourceAllocator,
+			net.minecraft.client.DeltaTracker deltaTracker,
+			boolean renderOutline,
+			net.minecraft.client.renderer.state.level.CameraRenderState cameraState,
+			org.joml.Matrix4fc modelViewMatrix, com.mojang.blaze3d.buffers.GpuBufferSlice terrainFog,
+			org.joml.Vector4f fogColor,
+			boolean shouldRenderSky,
+			CallbackInfo ci
+	) {
+		sway$markedSections.clear();
+		SwayEngine.update();
+	}*/
 	//?}
 	//? <26.2{
 	/*@Inject(method = "renderLevel", at = @At("HEAD"))

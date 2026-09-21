@@ -166,8 +166,13 @@ public class SwayModel implements /*? >= 1.21.2 {*/ BlockStateModel /*?} else {*
 			return true;
 		});
 
-		this.parent.emitQuads(emitter, view, pos, state, random, cull);
-		emitter.popTransform();
+		try {
+			this.parent.emitQuads(emitter, view, pos, state, random, cull);
+		} finally {
+			// The transform must always be popped, otherwise the emitter is left with a dirty transform
+			// stack, which corrupts every quad emitted afterwards through the same (pooled) emitter.
+			emitter.popTransform();
+		}
 	}
 	//?}
 
@@ -228,6 +233,27 @@ public class SwayModel implements /*? >= 1.21.2 {*/ BlockStateModel /*?} else {*
 	@Override
 	public @BakedQuad.MaterialFlags int materialFlags() {
 		return this.parent.materialFlags();
+	}
+
+	// Since 26.x BlockStateModel extends FabricBlockStateModel and the renderer (RenderPearl/Indigo) mostly uses
+	// the context-aware variants. A delegating model must forward those calls to its submodel, otherwise the
+	// renderer works with material/particle data that does not match the geometry this model actually emits.
+	@Override
+	public net.minecraft.client.resources.model.sprite.Material.Baked particleMaterial(
+			BlockAndTintGetter view, BlockPos pos, BlockState state) {
+		return this.parent.particleMaterial(view, pos, state);
+	}
+
+	@Override
+	public int materialFlags(BlockAndTintGetter view, BlockPos pos, BlockState state, RandomSource random) {
+		return this.parent.materialFlags(view, pos, state, random);
+	}
+
+	@Override
+	public Object createGeometryKey(BlockAndTintGetter view, BlockPos pos, BlockState state, RandomSource random) {
+		// The geometry emitted by this model is dynamic (it depends on the runtime sway state), so it must never
+		// be cached by the renderer: returning null means "no geometry key for this context".
+		return null;
 	}
 	//?}
 }
